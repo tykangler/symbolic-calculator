@@ -28,8 +28,6 @@ public class DoubleLinkedList<T> implements IList<T> {
     @Override
     public void add(T item) {
         throw new NotYetImplementedException();
-        // Hi Tyler.
-        // This is a commit test.
     }
 
     @Override
