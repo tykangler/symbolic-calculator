@@ -100,12 +100,20 @@ public class DoubleLinkedList<T> implements IList<T> {
             throw new IndexOutOfBoundsException();
         }
         Node<T> nodeToDelete = getNode(index);
-        if (nodeToDelete.next != null) {
+        if (nodeToDelete == front && nodeToDelete == back) {
+            front = null;
+            back = null;
+        } else if (nodeToDelete == front) {
+            front = nodeToDelete.next;
+            front.prev = null;
+        } else if (nodeToDelete == back) {
+            back = nodeToDelete.prev;
+            back.next = null;
+        } else {
             nodeToDelete.next.prev = nodeToDelete.prev;
-        } 
-        if (nodeToDelete.prev != null) {
             nodeToDelete.prev.next = nodeToDelete.next;
         }
+        size--;
         return nodeToDelete.data;
     }
 
