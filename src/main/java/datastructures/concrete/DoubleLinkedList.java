@@ -12,9 +12,7 @@ import java.util.NoSuchElementException;
  * (You should be able to control/command+click "IList" above to open the file from IntelliJ.)
  */
 public class DoubleLinkedList<T> implements IList<T> {
-    // You may not rename these fields or change their types.
-    // We will be inspecting these in our private tests.
-    // You also may not add any additional fields.
+    
     private Node<T> front;
     private Node<T> back;
     private int size;
@@ -27,7 +25,13 @@ public class DoubleLinkedList<T> implements IList<T> {
 
     @Override
     public void add(T item) {
-        throw new NotYetImplementedException();
+        if (size == 0) {
+            front = new Node<T>(item);
+            back = front;
+        } else {
+            back.next = new Node<T>(item);
+        }
+        size++;
     }
 
     @Override
@@ -35,9 +39,24 @@ public class DoubleLinkedList<T> implements IList<T> {
         throw new NotYetImplementedException();
     }
 
+    private Node<T> getNode(int index) {
+        Node<T> curr = front;
+        if (index == size - 1) {
+            return back;
+        }
+        while (index > 0) {
+            index--;    
+            curr = curr.next;
+        }
+        return curr;    
+    }
+
     @Override
     public T get(int index) {
-        throw new NotYetImplementedException();
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+        return getNode(index).data;
     }
 
     @Override
@@ -47,12 +66,35 @@ public class DoubleLinkedList<T> implements IList<T> {
 
     @Override
     public void insert(int index, T item) {
-        throw new NotYetImplementedException();
+        if (index < 0 || index >= size + 1) {
+            throw new IndexOutOfBoundsException();
+        }
+        Node<T> newNode = new Node<T>(item);
+        Node<T> nodeAtIndex = getNode(index);
+        if (nodeAtIndex != null) {
+            newNode.next = nodeAtIndex;
+            newNode.prev = nodeAtIndex.prev;
+            nodeAtIndex.prev = newNode;
+            if(nodeAtIndex.prev != null) {
+                newNode.prev.next = newNode;
+            }
+        }
+        // BROKEN, will fix later
     }
 
     @Override
     public T delete(int index) {
-        throw new NotYetImplementedException();
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+        Node<T> nodeToDelete = getNode(index);
+        if (nodeToDelete.next != null) {
+            nodeToDelete.next.prev = nodeToDelete.prev;
+        } 
+        if (nodeToDelete.prev != null) {
+            nodeToDelete.prev.next = nodeToDelete.next;
+        }
+        return nodeToDelete.data;
     }
 
     @Override
@@ -62,7 +104,6 @@ public class DoubleLinkedList<T> implements IList<T> {
 
     @Override
     public int size() {
-        // throw new NotYetImplementedException();
         return size;
     }
 
