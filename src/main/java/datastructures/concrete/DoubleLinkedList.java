@@ -39,6 +39,8 @@ public class DoubleLinkedList<T> implements IList<T> {
         throw new NotYetImplementedException();
     }
 
+    // helper method, gets node at index
+    // exceptions are handled in caller
     private Node<T> getNode(int index) {
         Node<T> curr = front;
         if (index == size - 1) {
@@ -71,19 +73,19 @@ public class DoubleLinkedList<T> implements IList<T> {
         }
         Node<T> newNode = new Node<T>(item);
         Node<T> nodeAtIndex = getNode(index);
-        if (nodeAtIndex == null) {
-            if (index == 0) {
+        if (nodeAtIndex == null) { // inserting in empty list or at back
+            if (index == 0) { // empty list
                 front = newNode;
-            } else {
+            } else { // at back
                 newNode.prev = back;
                 back.next = newNode;
             }
-            back = newNode;
-        } else {
+            back = newNode; // set new back pointer regardless
+        } else { // non empty list or inserting in middle
             newNode.next = nodeAtIndex;
-            if (nodeAtIndex == front) {
+            if (nodeAtIndex == front) { // insert node at front
                 front = newNode;
-            } else {
+            } else { // insert node in middle
                 newNode.prev = nodeAtIndex.prev;
                 newNode.prev.next = newNode;
             }
