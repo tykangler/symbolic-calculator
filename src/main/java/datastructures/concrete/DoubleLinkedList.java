@@ -73,10 +73,10 @@ public class DoubleLinkedList<T> implements IList<T> {
         }
         Node<T> newNode = new Node<T>(item);
         Node<T> nodeAtIndex = getNode(index);
-        if (nodeAtIndex == null) { // inserting in empty list or at back
+        if (nodeAtIndex == null) { // inserting in empty list or past back
             if (index == 0) { // empty list
                 front = newNode;
-            } else { // at back
+            } else { // past back
                 newNode.prev = back;
                 back.next = newNode;
             }
