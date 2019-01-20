@@ -28,6 +28,7 @@ public class DoubleLinkedList<T> implements IList<T> {
     @Override
     public void add(T item) {
         throw new NotYetImplementedException();
+        // Hi Tyler.
     }
 
     @Override
@@ -62,7 +63,8 @@ public class DoubleLinkedList<T> implements IList<T> {
 
     @Override
     public int size() {
-        throw new NotYetImplementedException();
+        // throw new NotYetImplementedException();
+        return size;
     }
 
     @Override
