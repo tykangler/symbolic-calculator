@@ -71,15 +71,25 @@ public class DoubleLinkedList<T> implements IList<T> {
         }
         Node<T> newNode = new Node<T>(item);
         Node<T> nodeAtIndex = getNode(index);
-        if (nodeAtIndex != null) {
+        if (nodeAtIndex == null) {
+            if (index == 0) {
+                front = newNode;
+            } else {
+                newNode.prev = back;
+                back.next = newNode;
+            }
+            back = newNode;
+        } else {
             newNode.next = nodeAtIndex;
-            newNode.prev = nodeAtIndex.prev;
-            nodeAtIndex.prev = newNode;
-            if(nodeAtIndex.prev != null) {
+            if (nodeAtIndex == front) {
+                front = newNode;
+            } else {
+                newNode.prev = nodeAtIndex.prev;
                 newNode.prev.next = newNode;
             }
+            nodeAtIndex.prev = newNode;
         }
-        // BROKEN, will fix later
+        size++;
     }
 
     @Override
