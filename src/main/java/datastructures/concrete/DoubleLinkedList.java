@@ -1,6 +1,7 @@
 package datastructures.concrete;
 
 import datastructures.interfaces.IList;
+import misc.exceptions.EmptyContainerException;
 import misc.exceptions.NotYetImplementedException;
 
 import java.util.Iterator;
@@ -32,7 +33,13 @@ public class DoubleLinkedList<T> implements IList<T> {
 
     @Override
     public T remove() {
-        throw new NotYetImplementedException();
+        Node<T> curr = back;
+        if (size == 0 || front == null && back == null) {
+            throw new EmptyContainerException();
+        } else {
+            back = null;
+            return curr.data;
+        }
     }
 
     @Override
@@ -42,7 +49,18 @@ public class DoubleLinkedList<T> implements IList<T> {
 
     @Override
     public void set(int index, T item) {
-        throw new NotYetImplementedException();
+        if (index < 0 || index >= this.size()) {
+            throw new IndexOutOfBoundsException();
+        }
+        Node<T> setNode = new Node(null, item, null);
+        Node<T> curr = front;
+        while (index != 0) {
+            curr = curr.next;
+            index--;
+        }
+        setNode.prev = curr.prev;
+        setNode.next = curr.next;
+        curr = setNode;
     }
 
     @Override
@@ -57,18 +75,36 @@ public class DoubleLinkedList<T> implements IList<T> {
 
     @Override
     public int indexOf(T item) {
-        throw new NotYetImplementedException();
+        Node<T> curr = front;
+        int index = 0;
+        while (index != 0) {
+            if (item == curr.data) {
+                return index;
+            }
+            curr = curr.next;
+            index++;
+        }
+        return -1;
     }
 
     @Override
     public int size() {
-        // throw new NotYetImplementedException();
         return size;
     }
 
     @Override
     public boolean contains(T other) {
-        throw new NotYetImplementedException();
+        Node<T> curr = front;
+        int index = 0;
+        while (index != 0) {
+            if (other == curr) {
+                return true;
+            }
+            curr = curr.next;
+            index++;
+        }
+        return false;
+
     }
 
     @Override
