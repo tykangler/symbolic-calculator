@@ -58,14 +58,19 @@ public class DoubleLinkedList<T> implements IList<T> {
     // helper method, gets node at index
     // exceptions are handled in caller
     private Node<T> getNode(int index) {
-        Node<T> curr = front;
-        if (index == size - 1) {
-            return back;
-        }
-        while (index > 0) {
-            index--;    
-            curr = curr.next;
-        }
+        Node<T> curr = back;
+        if (index > size / 2) {
+            while (index <= size) {
+                index++;
+                curr = curr.prev;
+            }
+        } else {
+            curr = front;
+            while (index > 0) {
+                index--;    
+                curr = curr.next;
+            }
+        }   
         return curr;    
     }
 
