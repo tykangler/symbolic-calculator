@@ -38,12 +38,20 @@ public class DoubleLinkedList<T> implements IList<T> {
 
     @Override
     public T remove() {
-        Node<T> curr = back;
-        if (size == 0 || front == null && back == null) {
+        if (back == null) {
             throw new EmptyContainerException();
         } else {
-            back = null;
-            return curr.data;
+            Node<T> curr = back;
+            T item = curr.data;
+            if (back.prev != null) {
+                back = back.prev;
+                back.next = null;
+            } else {
+                back = null;
+                front = null;
+            }
+            size--;
+            return item;
         }
     }
 
@@ -75,14 +83,30 @@ public class DoubleLinkedList<T> implements IList<T> {
             throw new IndexOutOfBoundsException();
         }
         Node<T> newNode = new Node(null, item, null);
-        Node<T> curr = front;
-        while (index != 0) {
-            curr = curr.next;
-            index--;
+        Node<T> curr = null;
+        if (front != null) {
+            if (index == 0) { // front of the list
+                front = newNode;
+                back = newNode;
+            } else if (index > 0 && index == size - 1) { // back of the list
+                curr = back;
+                newNode.prev = curr.prev;
+                curr.prev.next = newNode;
+                back = newNode;
+            } else { // middle of the list
+                curr = front;
+                while (index > 0) {
+                    index--;
+                    curr = curr.next;
+                }
+                newNode.prev = curr.prev;
+                newNode.next = curr.next;
+                curr.prev.next = newNode;
+                curr.next.prev = newNode;
+            }
         }
-        newNode.prev = curr.prev;
-        newNode.next = curr.next;
-        curr = newNode;
+
+
     }
 
     @Override
