@@ -13,9 +13,7 @@ import java.util.NoSuchElementException;
  * (You should be able to control/command+click "IList" above to open the file from IntelliJ.)
  */
 public class DoubleLinkedList<T> implements IList<T> {
-    // You may not rename these fields or change their types.
-    // We will be inspecting these in our private tests.
-    // You also may not add any additional fields.
+    
     private Node<T> front;
     private Node<T> back;
     private int size;
@@ -28,7 +26,13 @@ public class DoubleLinkedList<T> implements IList<T> {
 
     @Override
     public void add(T item) {
-        throw new NotYetImplementedException();
+        if (size == 0) {
+            front = new Node<T>(item);
+            back = front;
+        } else {
+            back.next = new Node<T>(item);
+        }
+        size++;
     }
 
     @Override
@@ -42,9 +46,26 @@ public class DoubleLinkedList<T> implements IList<T> {
         }
     }
 
+    // helper method, gets node at index
+    // exceptions are handled in caller
+    private Node<T> getNode(int index) {
+        Node<T> curr = front;
+        if (index == size - 1) {
+            return back;
+        }
+        while (index > 0) {
+            index--;    
+            curr = curr.next;
+        }
+        return curr;    
+    }
+
     @Override
     public T get(int index) {
-        throw new NotYetImplementedException();
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+        return getNode(index).data;
     }
 
     @Override
@@ -65,12 +86,53 @@ public class DoubleLinkedList<T> implements IList<T> {
 
     @Override
     public void insert(int index, T item) {
-        throw new NotYetImplementedException();
+        if (index < 0 || index >= size + 1) {
+            throw new IndexOutOfBoundsException();
+        }
+        Node<T> newNode = new Node<T>(item);
+        Node<T> nodeAtIndex = getNode(index);
+        if (nodeAtIndex == null) { // inserting in empty list or past back
+            if (index == 0) { // empty list
+                front = newNode;
+            } else { // past back
+                newNode.prev = back;
+                back.next = newNode;
+            }
+            back = newNode; // set new back pointer regardless
+        } else { // non empty list or inserting in middle
+            newNode.next = nodeAtIndex;
+            if (nodeAtIndex == front) { // insert node at front
+                front = newNode;
+            } else { // insert node in middle
+                newNode.prev = nodeAtIndex.prev;
+                newNode.prev.next = newNode;
+            }
+            nodeAtIndex.prev = newNode;
+        }
+        size++;
     }
 
     @Override
     public T delete(int index) {
-        throw new NotYetImplementedException();
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+        Node<T> nodeToDelete = getNode(index);
+        if (nodeToDelete == front && nodeToDelete == back) {
+            front = null;
+            back = null;
+        } else if (nodeToDelete == front) {
+            front = nodeToDelete.next;
+            front.prev = null;
+        } else if (nodeToDelete == back) {
+            back = nodeToDelete.prev;
+            back.next = null;
+        } else {
+            nodeToDelete.next.prev = nodeToDelete.prev;
+            nodeToDelete.prev.next = nodeToDelete.next;
+        }
+        size--;
+        return nodeToDelete.data;
     }
 
     @Override
