@@ -25,12 +25,13 @@ public class DoubleLinkedList<T> implements IList<T> {
 
     @Override
     public void add(T item) {
+        Node<T> newNode = new Node<T>(back, item);
         if (size == 0) {
-            front = new Node<T>(item);
-            back = front;
+            front = newNode;
         } else {
-            back.next = new Node<T>(item);
+            back.next = newNode;
         }
+        back = newNode;
         size++;
     }
 
@@ -151,6 +152,10 @@ public class DoubleLinkedList<T> implements IList<T> {
             this.data = data;
             this.prev = prev;
             this.next = next;
+        }
+
+        public Node(Node<E> prev, E data) {
+            this(prev, data, null);
         }
 
         public Node(E data) {
