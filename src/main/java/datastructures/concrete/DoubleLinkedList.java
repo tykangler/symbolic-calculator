@@ -73,15 +73,15 @@ public class DoubleLinkedList<T> implements IList<T> {
         if (index < 0 || index >= this.size()) {
             throw new IndexOutOfBoundsException();
         }
-        Node<T> setNode = new Node(null, item, null);
+        Node<T> newNode = new Node(null, item, null);
         Node<T> curr = front;
         while (index != 0) {
             curr = curr.next;
             index--;
         }
-        setNode.prev = curr.prev;
-        setNode.next = curr.next;
-        curr = setNode;
+        newNode.prev = curr.prev;
+        newNode.next = curr.next;
+        curr = newNode;
     }
 
     @Override
