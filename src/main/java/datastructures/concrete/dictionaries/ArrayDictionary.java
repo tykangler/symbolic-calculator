@@ -10,11 +10,11 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
     // You may not change or rename this field.
     // We will be inspecting it in our private tests.
     private Pair<K, V>[] pairs;
+    int size;
 
     // You may add extra fields or helper methods though!
 
     public ArrayDictionary() {
-        throw new NotYetImplementedException();
     }
 
     /**
