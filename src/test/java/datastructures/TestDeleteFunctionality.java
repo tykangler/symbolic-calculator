@@ -6,8 +6,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * This class should contain all the tests you implement to verify that
@@ -75,7 +74,7 @@ public class TestDeleteFunctionality extends TestDoubleLinkedList {
     }
 
     @Test(timeout = SECOND)
-    public void testDeleteOneElement() {
+    public void testDeleteSingleElement() {
         IList<String> list = new DoubleLinkedList<>();
         int initSize = list.size();
         list.add("a");
@@ -112,6 +111,13 @@ public class TestDeleteFunctionality extends TestDoubleLinkedList {
 
         // make sure size is still the same
         assertEquals(initSize, list.size());
+
+        try {
+            list.delete(-2);
+            fail("Expected IndexOutOfBoundException");
+        } catch (IndexOutOfBoundsException ex) {
+            // Do nothing.
+        }
     }
 
     @Test(timeout = SECOND)
@@ -126,10 +132,39 @@ public class TestDeleteFunctionality extends TestDoubleLinkedList {
     }
 
     @Test(timeout = SECOND)
-    public void testDeleteMultiple() {
-        // kek.
+    public void testAlternatingAddAndDelete() {
+        int iterators = 1000;
+
+        IList<String> list = new DoubleLinkedList<>();
+
+        for (int i = 0; i < iterators; i++) {
+            String entry = "" + i;
+            list.add(entry);
+            assertEquals(1, list.size());
+
+            String out = list.delete(0);
+            assertEquals(entry, out);
+            assertEquals(0, list.size());
+        }
     }
 
-    // Need to test that if we call multiple different methods all at once
+    @Test(timeout = SECOND)
+    public void testDeleteWithContainsAndIndexOf() {
+        IList<String> list = makeBasicList();
+        list.add("foo");
+        list.add("bar");
+        list.add("baz");
+        int initSize = list.size();
+
+        assertEquals("foo", list.delete(3));
+        assertFalse(list.contains("foo"));
+        assertEquals(3, list.indexOf("bar"));
+
+        assertEquals("a", list.delete(0));
+        assertFalse(list.contains("a"));
+        assertEquals(0, list.indexOf("b"));
+
+        assertEquals(initSize - 2, list.size());
+    }
 
 }
