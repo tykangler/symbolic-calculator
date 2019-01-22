@@ -167,4 +167,26 @@ public class TestDeleteFunctionality extends TestDoubleLinkedList {
         assertEquals(initSize - 2, list.size());
     }
 
+    @Test(timeout = SECOND)
+    public void testDeleteAndInsert() {
+        IList<String> list = makeBasicList();
+        int initSize = list.size();
+
+        list.insert(1, "d");
+        assertListMatches(new String[]{"a", "d", "b", "c"}, list);
+
+        list.delete(1);
+        assertListMatches(new String[]{"a", "b", "c"}, list);
+
+        assertEquals(list.size(), initSize);
+
+        list.delete(2);
+        assertListMatches(new String[]{"a", "b"}, list);
+
+        list.insert(1, "z");
+        assertListMatches(new String[]{"a", "z", "b"}, list);
+
+        assertEquals(list.size(), initSize);
+    }
+
 }
