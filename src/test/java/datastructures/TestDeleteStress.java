@@ -18,4 +18,6 @@ public class TestDeleteStress extends TestDoubleLinkedList {
         assertTrue(true);
         assertEquals(3, 3);
     }
+
+
 }

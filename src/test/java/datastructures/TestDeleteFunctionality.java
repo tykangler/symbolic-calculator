@@ -100,6 +100,7 @@ public class TestDeleteFunctionality extends TestDoubleLinkedList {
     @Test(timeout = SECOND)
     public void testIndexOutOfBoundThrowsException() {
         IList<String> list = new DoubleLinkedList<>();
+        int initSize = list.size();
 
         try {
             list.delete(0);
@@ -108,11 +109,27 @@ public class TestDeleteFunctionality extends TestDoubleLinkedList {
         } catch (IndexOutOfBoundsException ex) {
             // Do nothing. This is a-ok.
         }
+
+        // make sure size is still the same
+        assertEquals(initSize, list.size());
+    }
+
+    @Test(timeout = SECOND)
+    public void testDeleteNullElement() {
+        IList<String> list = makeBasicList();
+        int initSize = list.size();
+
+        list.add(null);
+
+        assertEquals(null, list.delete(3));
+        assertEquals(initSize, list.size());
     }
 
     @Test(timeout = SECOND)
     public void testDeleteMultiple() {
         // kek.
     }
+
+    // Need to test that if we call multiple different methods all at once
 
 }
