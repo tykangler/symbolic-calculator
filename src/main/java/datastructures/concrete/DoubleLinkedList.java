@@ -173,7 +173,16 @@ public class DoubleLinkedList<T> implements IList<T> {
 
     @Override
     public int indexOf(T item) {
-        return compare(item);
+        Node<T> curr = front;
+        int index = 0;
+        while (index < size) {
+            if (item != null ? item.equals(curr.data) : item == curr.data) {
+                return index;
+            }
+            index++;
+            curr = curr.next;
+        }
+        return -1;
     }
 
     @Override
@@ -183,23 +192,7 @@ public class DoubleLinkedList<T> implements IList<T> {
 
     @Override
     public boolean contains(T other) {
-        return compare(other) != -1;
-    }
-
-    // helper method, compares an Object<T>
-    // other with every element in the list
-    private int compare(T compareTo) {
-        Node<T> curr = front;
-        int index = 0;
-        int tempSize = size;
-        while (index < tempSize) {
-            if (compareTo != null ? compareTo.equals(curr.data) : compareTo == curr.data) {
-                return index;
-            }
-            index++;
-            curr = curr.next;
-        }
-        return -1;
+        return indexOf(other) >= 0;
     }
 
     @Override
