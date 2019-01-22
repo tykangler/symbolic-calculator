@@ -91,7 +91,7 @@ public class DoubleLinkedList<T> implements IList<T> {
         }
         Node<T> newNode = new Node<T>(item);
         Node<T> curr = front;
-        if (front == null) {
+        if (front == null || front.next == null) { // setting on an empty list or list with only one element
             front = newNode;
             back = newNode;
         } else {
@@ -171,17 +171,9 @@ public class DoubleLinkedList<T> implements IList<T> {
     }
 
 
-    // indexOfAndContainsMany test failed. Go back to it later.
     @Override
     public int indexOf(T item) {
-        Node<T> curr = front;
-        for (int i = 0; i < size; i++) {
-            if (item == curr.data || item.equals(curr.data)) {
-                return i;
-            }
-            curr = curr.next;
-        }
-        return -1;
+        return compare(item);
     }
 
     @Override
@@ -191,15 +183,23 @@ public class DoubleLinkedList<T> implements IList<T> {
 
     @Override
     public boolean contains(T other) {
+        return compare(other) != -1;
+    }
+
+    // helper method, compares an Object<T>
+    // other with every element in the list
+    private int compare(T compareTo) {
         Node<T> curr = front;
-        for (int i = 0; i < size; i++) {
-            if (other == curr.data || other.equals(curr.data)) {
-                return true;
+        int index = 0;
+        int tempSize = size;
+        while (index < tempSize) {
+            if (compareTo != null ? compareTo.equals(curr.data) : compareTo == curr.data) {
+                return index;
             }
+            index++;
             curr = curr.next;
         }
-        return false;
-
+        return -1;
     }
 
     @Override
