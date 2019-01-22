@@ -1,10 +1,13 @@
 package datastructures;
 
+import datastructures.concrete.DoubleLinkedList;
+import datastructures.interfaces.IList;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * This class should contain all the tests you implement to verify that
@@ -26,4 +29,90 @@ public class TestDeleteFunctionality extends TestDoubleLinkedList {
         assertTrue(true);
         assertEquals(3, 3);
     }
+
+    protected IList<String> makeBasicList() {
+        IList<String> list = new DoubleLinkedList<>();
+
+        list.add("a");
+        list.add("b");
+        list.add("c");
+
+        return list;
+    }
+
+    /**
+     * This function will check if a list contains exactly the same elements as
+     * the "expected" array. See the tests provided for example usage.
+     */
+    protected <T> void assertListMatches(T[] expected, IList<T> actual) {
+        assertEquals(expected.length, actual.size());
+        assertEquals(expected.length == 0, actual.isEmpty());
+
+        for (int i = 0; i < expected.length; i++) {
+            try {
+                assertEquals("Item at index " + i + " does not match", expected[i], actual.get(i));
+            } catch (Exception ex) {
+                String errorMessage = String.format(
+                        "Got %s when getting item at index %d (expected '%s')",
+                        ex.getClass().getSimpleName(),
+                        i,
+                        expected[i]);
+                throw new AssertionError(errorMessage, ex);
+            }
+        }
+    }
+
+    @Test(timeout = SECOND)
+    public void basicTestDelete() {
+        IList<String> list = makeBasicList();
+        int initSize = list.size();
+
+        String test = list.delete(0);
+
+        assertEquals("a", test);
+        assertEquals("b", list.get(0));
+        assertEquals(initSize - 1, list.size());
+    }
+
+    @Test(timeout = SECOND)
+    public void testDeleteOneElement() {
+        IList<String> list = new DoubleLinkedList<>();
+        int initSize = list.size();
+        list.add("a");
+
+        String test = list.delete(0);
+
+        assertEquals("a", test);
+        assertEquals(initSize, list.size());
+    }
+
+    @Test(timeout = SECOND)
+    public void testDeleteAtEnd() {
+        IList<String> list = makeBasicList();
+        int initSize = list.size();
+
+        String test = list.delete(list.size() - 1);
+
+        assertEquals("c", test);
+        assertEquals(initSize - 1, list.size());
+    }
+
+    @Test(timeout = SECOND)
+    public void testIndexOutOfBoundThrowsException() {
+        IList<String> list = new DoubleLinkedList<>();
+
+        try {
+            list.delete(0);
+            // Didn't throw anything? Fail now.
+            fail("Expected IndexOutOfBoundException");
+        } catch (IndexOutOfBoundsException ex) {
+            // Do nothing. This is a-ok.
+        }
+    }
+
+    @Test(timeout = SECOND)
+    public void testDeleteMultiple() {
+        // kek.
+    }
+
 }
