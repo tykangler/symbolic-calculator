@@ -2,7 +2,6 @@ package datastructures.concrete;
 
 import datastructures.interfaces.IList;
 import misc.exceptions.EmptyContainerException;
-import misc.exceptions.NotYetImplementedException;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -168,6 +167,8 @@ public class DoubleLinkedList<T> implements IList<T> {
         return nodeToDelete.data;
     }
 
+
+    // indexOfAndContainsMany test failed. Go back to it later.
     @Override
     public int indexOf(T item) {
         Node<T> curr = front;
@@ -244,7 +245,7 @@ public class DoubleLinkedList<T> implements IList<T> {
          * returns 'false' otherwise.
          */
         public boolean hasNext() {
-            throw new NotYetImplementedException();
+            return current != null;
         }
 
         /**
@@ -255,7 +256,12 @@ public class DoubleLinkedList<T> implements IList<T> {
          *         there are no more elements to look at.
          */
         public T next() {
-            throw new NotYetImplementedException();
+            if (current == null) {
+                throw new NoSuchElementException();
+            }
+            T data = current.data;
+            current = current.next;
+            return data;
         }
     }
 }
