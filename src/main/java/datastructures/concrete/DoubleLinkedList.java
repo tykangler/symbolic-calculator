@@ -87,7 +87,7 @@ public class DoubleLinkedList<T> implements IList<T> {
         if (index < 0 || index >= this.size()) {
             throw new IndexOutOfBoundsException();
         }
-        Node<T> newNode = new Node(null, item, null);
+        Node<T> newNode = new Node<T>(item);
         Node<T> curr = null;
         if (front != null) {
             if (index == 0) { // front of the list
