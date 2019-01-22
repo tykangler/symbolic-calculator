@@ -88,7 +88,7 @@ public class DoubleLinkedList<T> implements IList<T> {
             throw new IndexOutOfBoundsException();
         }
         Node<T> newNode = new Node<T>(item);
-        Node<T> curr = null;
+        Node<T> curr = front;
         if (front == null) {
             front = newNode;
             back = newNode;
