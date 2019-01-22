@@ -432,7 +432,7 @@ public class TestDoubleLinkedList extends BaseTest {
         assertTrue(list.contains(item2));
     }
 
-    @Test(timeout = 200 * SECOND)
+    @Test(timeout = 5 * SECOND)
     public void testIndexOfAndContainsMany() {
         int cap = 1000;
         int stringLength = 100;
