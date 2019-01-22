@@ -69,7 +69,7 @@ public class DoubleLinkedList<T> implements IList<T> {
                 index--;    
                 curr = curr.next;
             }
-        }   
+        }
         return curr;    
     }
 
@@ -96,7 +96,7 @@ public class DoubleLinkedList<T> implements IList<T> {
                 newNode.next = curr.next;
                 curr.next.prev = newNode;
                 front = newNode;
-            } else if (index > 0 && index == size - 1) { // back of the list
+            } else if (index == size - 1) { // back of the list
                 curr = back;
                 newNode.prev = curr.prev;
                 curr.prev.next = newNode;
