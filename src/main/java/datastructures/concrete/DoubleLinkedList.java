@@ -88,18 +88,21 @@ public class DoubleLinkedList<T> implements IList<T> {
             throw new IndexOutOfBoundsException();
         }
         Node<T> newNode = new Node(null, item, null);
-        Node<T> curr = null;
-        if (front != null) {
+        Node<T> curr = front;
+        if (front == null) { // setting an empty list
+            front = newNode;
+            back = newNode;
+        } else {
             if (index == 0) { // front of the list
+                newNode.next = curr.next;
+                curr.next.prev = newNode;
                 front = newNode;
-                back = newNode;
             } else if (index > 0 && index == size - 1) { // back of the list
                 curr = back;
                 newNode.prev = curr.prev;
                 curr.prev.next = newNode;
                 back = newNode;
             } else { // middle of the list
-                curr = front;
                 while (index > 0) {
                     index--;
                     curr = curr.next;
