@@ -2,6 +2,7 @@ package datastructures.concrete.dictionaries;
 
 import datastructures.interfaces.IDictionary;
 import misc.exceptions.NoSuchKeyException;
+import misc.exceptions.NotYetImplementedException;
 
 /**
  * @see datastructures.interfaces.IDictionary
@@ -24,34 +25,13 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
 
     @Override
     public V get(K key) {
-        if (containsKey(key)) {
-            for (int i = 0; i < pairs.length; i++) {
-                if (key != null ? pairs[i].key.equals(key) : pairs[i].key == key) {
-                    return pairs[i].value;
-                }
-            }
+        int keyIndex = indexOf(key);
+        if (keyIndex < 0) {
+            throw new NoSuchKeyException();
         }
-        throw new NoSuchKeyException();
+        return pairs[keyIndex].value;
     }
-
-    private void increaseCapacity() {
-        Pair<K, V>[] newArray = makeArrayOfPairs(pairs.length * 2);
-        for (int i = 0; i < pairs.length; i++) {
-            newArray[i] = pairs[i];
-        }
-        pairs = newArray;
-    }
-
-    private int indexOf(K key) {
-        for (int i = 0; i < size; i++) {
-            K currKey = pairs[i].key;
-            if (key != null ? currKey.equals(key) : currKey == key) {
-                return i;
-            }
-        }
-        return -1;
-    } 
-
+    
     @Override
     public void put(K key, V value) {
         if (size >= pairs.length) {
@@ -68,21 +48,7 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
 
     @Override
     public V remove(K key) {
-        if (!this.containsKey(key)) {
-            throw new NoSuchKeyException();
-        }
-        int targetIndex = 0;
-        for (int i = 0; i < size; i++) {
-            K currKey = pairs[i].key;
-            if (key != null ? currKey.equals(key) : currKey == key) {
-                targetIndex = i;
-            }
-        }
-        Pair<K, V> lastPair = pairs[size - 1];
-        size--;
-        V removeValue = pairs[targetIndex].value;
-        pairs[targetIndex] = lastPair;
-        return removeValue;
+        throw new NotYetImplementedException();
     }
 
     @Override
@@ -95,6 +61,24 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
         return size;
     }
 
+    private int indexOf(K key) {
+        for (int i = 0; i < size; i++) {
+            K currKey = pairs[i].key;
+            if (key != null ? currKey.equals(key) : currKey == key) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private void increaseCapacity() {
+        Pair<K, V>[] newArray = makeArrayOfPairs(pairs.length * 2);
+        for (int i = 0; i < pairs.length; i++) {
+            newArray[i] = pairs[i];
+        }
+        pairs = newArray;
+    }
+    
     private static class Pair<K, V> {
         public K key;
         public V value;
