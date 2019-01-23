@@ -25,9 +25,9 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
 
     @Override
     public V get(K key) {
-        for (Pair pair : pairs) {
+        for (Pair<K, V> pair : pairs) {
             if (pair.key == key) {
-                return (V) pair.value;
+                return pair.value;
             }
         }
         throw new NoSuchKeyException();
