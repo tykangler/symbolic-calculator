@@ -47,10 +47,10 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
 
     @Override
     public V remove(K key) {
-        if (!this.containsKey(key)) {
+        int targetIndex = indexOf(key);
+        if (targetIndex < 0) {
             throw new NoSuchKeyException();
         }
-        int targetIndex = indexOf(key);
         Pair<K, V> lastPair = pairs[size - 1];
         size--;
         V removeValue = pairs[targetIndex].value;
