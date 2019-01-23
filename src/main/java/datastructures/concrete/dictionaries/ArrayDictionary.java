@@ -2,7 +2,6 @@ package datastructures.concrete.dictionaries;
 
 import datastructures.interfaces.IDictionary;
 import misc.exceptions.NoSuchKeyException;
-import misc.exceptions.NotYetImplementedException;
 
 /**
  * @see datastructures.interfaces.IDictionary
@@ -48,7 +47,15 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
 
     @Override
     public V remove(K key) {
-        throw new NotYetImplementedException();
+        if (!this.containsKey(key)) {
+            throw new NoSuchKeyException();
+        }
+        int targetIndex = indexOf(key);
+        Pair<K, V> lastPair = pairs[size - 1];
+        size--;
+        V removeValue = pairs[targetIndex].value;
+        pairs[targetIndex] = lastPair;
+        return removeValue;
     }
 
     @Override
