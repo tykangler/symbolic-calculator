@@ -32,7 +32,15 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
 
     @Override
     public void put(K key, V value) {
-        throw new NotYetImplementedException();
+        if (size >= pairs.length) {
+            Pair<K, V>[] newArray = makeArrayOfPairs(pairs.length * 2);
+            for (int i = 0; i < pairs.length; i++) {
+                newArray[i] = pairs[i];
+            }
+            pairs = newArray;
+        }
+        pairs[size] = new Pair<K, V>(key, value);
+        size++;
     }
 
     @Override
@@ -42,19 +50,24 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
 
     @Override
     public boolean containsKey(K key) {
-        throw new NotYetImplementedException();
+        for (int i = 0; i < size; i++) {
+            K currKey = pairs[i].key;
+            if (key != null ? currKey.equals(key) : currKey == key) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
     public int size() {
-        throw new NotYetImplementedException();
+        return size;
     }
 
     private static class Pair<K, V> {
         public K key;
         public V value;
 
-        // You may add constructors and methods to this class as necessary.
         public Pair(K key, V value) {
             this.key = key;
             this.value = value;
