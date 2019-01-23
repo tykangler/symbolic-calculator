@@ -1,6 +1,7 @@
 package datastructures.concrete.dictionaries;
 
 import datastructures.interfaces.IDictionary;
+import misc.exceptions.NoSuchKeyException;
 import misc.exceptions.NotYetImplementedException;
 
 /**
@@ -27,7 +28,12 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
 
     @Override
     public V get(K key) {
-        throw new NotYetImplementedException();
+        for (Pair pair : pairs) {
+            if (pair.key == key) {
+                return (V) pair.value;
+            }
+        }
+        throw new NoSuchKeyException();
     }
 
     @Override
@@ -47,7 +53,7 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
 
     @Override
     public int size() {
-        throw new NotYetImplementedException();
+        return size;
     }
 
     private static class Pair<K, V> {
