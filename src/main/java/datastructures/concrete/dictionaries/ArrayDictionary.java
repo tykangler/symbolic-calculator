@@ -7,13 +7,10 @@ import misc.exceptions.NotYetImplementedException;
  * @see datastructures.interfaces.IDictionary
  */
 public class ArrayDictionary<K, V> implements IDictionary<K, V> {
-    // You may not change or rename this field.
-    // We will be inspecting it in our private tests.
+    
     private Pair<K, V>[] pairs;
     private static final int INIT_CAPACITY = 16;
     int size;
-
-    // You may add extra fields or helper methods though!
 
     public ArrayDictionary() {
         pairs = makeArrayOfPairs(INIT_CAPACITY);
@@ -30,17 +27,36 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
         throw new NotYetImplementedException();
     }
 
+    private void increaseCapacity() {
+        Pair<K, V>[] newArray = makeArrayOfPairs(pairs.length * 2);
+        for (int i = 0; i < pairs.length; i++) {
+            newArray[i] = pairs[i];
+        }
+        pairs = newArray;
+    }
+
+    private int indexOf(K key) {
+        for (int i = 0; i < size; i++) {
+            K currKey = pairs[i].key;
+            if (key != null ? currKey.equals(key) : currKey == key) {
+                return i;
+            }
+        }
+        return -1;
+    } 
+
     @Override
     public void put(K key, V value) {
         if (size >= pairs.length) {
-            Pair<K, V>[] newArray = makeArrayOfPairs(pairs.length * 2);
-            for (int i = 0; i < pairs.length; i++) {
-                newArray[i] = pairs[i];
-            }
-            pairs = newArray;
+            increaseCapacity();
         }
-        pairs[size] = new Pair<K, V>(key, value);
-        size++;
+        int keyIndex = indexOf(key);
+        if (keyIndex < 0) {
+            pairs[size] = new Pair<K, V>(key, value);
+            size++;
+        } else {
+            pairs[keyIndex].value = value;
+        }
     }
 
     @Override
@@ -50,13 +66,7 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
 
     @Override
     public boolean containsKey(K key) {
-        for (int i = 0; i < size; i++) {
-            K currKey = pairs[i].key;
-            if (key != null ? currKey.equals(key) : currKey == key) {
-                return true;
-            }
-        }
-        return false;
+        return indexOf(key) >= 0;
     }
 
     @Override
