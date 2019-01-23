@@ -51,10 +51,11 @@ public class ArrayDictionary<K, V> implements IDictionary<K, V> {
         if (targetIndex < 0) {
             throw new NoSuchKeyException();
         }
-        Pair<K, V> lastPair = pairs[size - 1];
-        size--;
         V removeValue = pairs[targetIndex].value;
-        pairs[targetIndex] = lastPair;
+        size--;
+        if (targetIndex < size) {
+            pairs[targetIndex] = pairs[size];
+        }
         return removeValue;
     }
 
