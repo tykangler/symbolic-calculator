@@ -5,6 +5,8 @@ import calculator.errors.EvaluationError;
 import datastructures.interfaces.IDictionary;
 import misc.exceptions.NotYetImplementedException;
 
+import java.lang.Math;
+
 /**
  * All of the public static methods in this class are given the exact same parameters for
  * consistency. You can often ignore some of these parameters when implementing your
@@ -69,19 +71,44 @@ public class ExpressionManipulators {
     private static double toDoubleHelper(IDictionary<String, AstNode> variables, AstNode node) {
         // There are three types of nodes, so we have three cases. 
         if (node.isNumber()) {
-            // TODO: your code here
-            throw new NotYetImplementedException();
+            return node.getNumericValue();
         } else if (node.isVariable()) {
-            // TODO: your code here
-            throw new NotYetImplementedException();
+            if (variables.containsKey(node.getName())) { // if the variable is already defined
+                AstNode key = variables.get(node.getName());
+                return key.getNumericValue();
+            } else { // if the variable is not yet defined
+                variables.put(node.getName(), new AstNode(node.getNumericValue()));
+                return 0.0; // ?
+            }
         } else {
             // You may assume the expression node has the correct number of children.
             // If you wish to make your code more robust, you can also use the provided
             // "assertNodeMatches" method to verify the input is valid.
             String name = node.getName();
+            // assertNodeMatches(node, name, 1);
+            if (name.equals("+")) {
+                return toDoubleHelper(variables, node.getChildren().get(0))
+                        + toDoubleHelper(variables, node.getChildren().get(1));
+            } else if (name.equals("-")) {
+                return toDoubleHelper(variables, node.getChildren().get(0))
+                        - toDoubleHelper(variables, node.getChildren().get(1));
+            } else if (name.equals("*")) {
+                return toDoubleHelper(variables, node.getChildren().get(0))
+                        * toDoubleHelper(variables, node.getChildren().get(1));
+            } else if (name.equals("/")) {
+                return toDoubleHelper(variables, node.getChildren().get(0))
+                        / toDoubleHelper(variables, node.getChildren().get(1));
+            } else if (name.equals("^")) {
+                return Math.pow(toDoubleHelper(variables, node.getChildren().get(0)),
+                        toDoubleHelper(variables, node.getChildren().get(1)));
+            } else if (name.equals("negate")) {
+                return -1 * toDoubleHelper(variables, node.getChildren().get(0));
+            } else if (name.equals("sin")) {
+                return Math.sin(toDoubleHelper(variables, node.getChildren().get(0)));
+            } else { // cos
+                return Math.cos(toDoubleHelper(variables, node.getChildren().get(0)));
+            }
 
-            // TODO: your code here
-            throw new NotYetImplementedException();
         }
     }
 
