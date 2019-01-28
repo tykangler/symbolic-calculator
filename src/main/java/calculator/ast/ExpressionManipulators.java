@@ -146,8 +146,11 @@ public class ExpressionManipulators {
         //         the current level? Or before?
 
         assertNodeMatches(node, "simplify", 1);
+        AstNode expToConvert = node.getChildren().get(0);
+        return simplifyHelper(env.getVariables(), expToConvert);
+    }
 
-        // TODO: Your code here
+    private static AstNode simplifyHelper(IDictionary<String, AstNode> variables, AstNode node) {
         throw new NotYetImplementedException();
     }
 
