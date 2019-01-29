@@ -76,7 +76,11 @@ public class ExpressionManipulators {
             if (!variables.containsKey(node.getName())) {
                 throw new EvaluationError("Variable is undefined.");
             }
+<<<<<<< HEAD
             return toDoubleHelper(variables, variables.get(node.getName()));
+=======
+            return variables.get(node.getName()).getNumericValue();
+>>>>>>> 1aedf7d4a1ba1bd4f248bc94103c9af5ab9dff31
         } else {
             String name = node.getName();
             IList<AstNode> children = node.getChildren();

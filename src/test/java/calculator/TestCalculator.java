@@ -57,7 +57,7 @@ public class TestCalculator extends BaseTest {
     public void basicTestSimplifyNewNode() {
         Calculator calc = new Calculator();
         calc.evaluate("y := x + 5"); // x+5
-        assertEquals("1", calc.evaluate("x := 1")); 
+        assertEquals("1", calc.evaluate("x := 1"));
         assertEquals("2", calc.evaluate("z := x + 1"));
         assertEquals("6", calc.evaluate("y"));
         
