@@ -156,23 +156,17 @@ public class ExpressionManipulators {
     private static AstNode simplifyHelper(IDictionary<String, AstNode> variables, AstNode node) {
         if (node.isVariable()) {
             if (variables.containsKey(node.getName())) {
-                node = simplifyHelper(variables, variables.get(node.getName()));
+                node = new AstNode(toDoubleHelper(variables, variables.get(node.getName())));
             }
         } else if (!node.isNumber()) {
             IList<AstNode> children = node.getChildren();
             AstNode leftNode = children.get(0);
             AstNode rightNode = children.get(1);
-            if (leftNode.isOperation()) {
+            if (leftNode.isOperation() || leftNode.isVariable()) {
                 children.set(0, simplifyHelper(variables, leftNode));
             }
-            if (rightNode.isOperation()) {
+            if (rightNode.isOperation() || rightNode.isVariable()) {
                 children.set(1, simplifyHelper(variables, rightNode));
-            }
-            if (leftNode.isVariable() && variables.containsKey(leftNode.getName())) {
-                children.set(0, simplifyHelper(variables, variables.get(leftNode.getName())));
-            } 
-            if (rightNode.isVariable() && variables.containsKey(rightNode.getName())) {
-                children.set(1, simplifyHelper(variables, variables.get(rightNode.getName())));
             }
             if (leftNode.isNumber() && rightNode.isNumber()) {
                 return new AstNode(toDoubleHelper(variables, node));
