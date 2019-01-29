@@ -146,12 +146,12 @@ public class ExpressionManipulators {
             IList<AstNode> children = node.getChildren();
             AstNode leftNode = children.get(0);
             if (leftNode.isOperation() || leftNode.isVariable()) {
-                children.set(0, simplifyHelper(variables, leftNode));
+                leftNode = simplifyHelper(variables, leftNode);
             }
             if (children.size() > 1) {
                 AstNode rightNode = children.get(1);
                 if (rightNode.isOperation() || rightNode.isVariable()) {
-                    children.set(1, simplifyHelper(variables, rightNode));
+                    rightNode = simplifyHelper(variables, rightNode);
                 }
                 if (leftNode.isNumber() && rightNode.isNumber()) {
                     if (node.getName().equals("+") || node.getName().equals("-") || 
