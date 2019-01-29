@@ -3,6 +3,7 @@ package calculator.ast;
 import calculator.interpreter.Environment;
 import calculator.errors.EvaluationError;
 import datastructures.interfaces.IDictionary;
+import datastructures.interfaces.IList;
 import misc.exceptions.NotYetImplementedException;
 
 import java.lang.Math;
@@ -151,7 +152,19 @@ public class ExpressionManipulators {
     }
 
     private static AstNode simplifyHelper(IDictionary<String, AstNode> variables, AstNode node) {
-        throw new NotYetImplementedException();
+        IList<AstNode> children = node.getChildren();
+        if (!node.isNumber() && !node.isVariable()) {
+            if (children.get(0).isOperation()) {
+                children.set(0, simplifyHelper(variables, children.get(0)));
+            }
+            if (children.get(1).isOperation()) {
+                children.set(1, simplifyHelper(variables, children.get(1)));
+            }
+            if (children.get(0).isNumber() && children.get(1).isNumber()) {
+                return new AstNode(toDoubleHelper(variables, node));
+            }
+        }
+        return node;
     }
 
     /**
