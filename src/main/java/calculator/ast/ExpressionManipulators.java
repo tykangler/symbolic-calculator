@@ -74,16 +74,10 @@ public class ExpressionManipulators {
         if (node.isNumber()) {
             return node.getNumericValue();
         } else if (node.isVariable()) {
-            //if (variables.containsKey(node.getName())) { // if the variable is already defined / being redefined
-                //AstNode key = variables.get(node.getName());
             if (!variables.containsKey(node.getName())) {
                 throw new EvaluationError("Variable is undefined.");
             }
-            return toDoubleHelper(variables, variables.get(node.getName()));
-            //} else { // if the variable is not yet defined
-            //   variables.put(node.getName(), new AstNode(node.getName());
-
-            //}
+            return variables.get(node.getName()).getNumericValue();
         } else {
             // You may assume the expression node has the correct number of children.
             // If you wish to make your code more robust, you can also use the provided
@@ -159,7 +153,7 @@ public class ExpressionManipulators {
     private static AstNode simplifyHelper(IDictionary<String, AstNode> variables, AstNode node) {
         if (node.isVariable()) {
             if (variables.containsKey(node.getName())) {
-                node = new AstNode(toDoubleHelper(variables, variables.get(node.getName())));
+                node = variables.get(node.getName());
             }
         } else if (!node.isNumber()) {
             IList<AstNode> children = node.getChildren();
