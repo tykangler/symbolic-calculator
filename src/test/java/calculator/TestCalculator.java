@@ -53,7 +53,7 @@ public class TestCalculator extends BaseTest {
         assertEquals("a + b", calc.evaluate("a + b"));
     }
     
-    @Test(timeout=1200*SECOND)
+    @Test(timeout=SECOND)
     public void basicTestSimplifyNewNode() {
         Calculator calc = new Calculator();
         calc.evaluate("y := x + 5"); // x+5
@@ -77,7 +77,7 @@ public class TestCalculator extends BaseTest {
         assertEquals("3", calc.evaluate("x + y"));
     }
 
-    @Test(timeout=SECOND)
+    @Test(timeout=1000 * SECOND)
     public void testExample2VariableRedefinition() {
         Calculator calc = new Calculator();
         assertEquals("x + 3", calc.evaluate("y := x + 3"));
