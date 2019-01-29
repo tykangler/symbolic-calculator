@@ -2,6 +2,7 @@ package calculator.ast;
 
 import calculator.interpreter.Environment;
 import calculator.errors.EvaluationError;
+import datastructures.concrete.DoubleLinkedList;
 import datastructures.interfaces.IDictionary;
 import datastructures.interfaces.IList;
 import misc.exceptions.NotYetImplementedException;
@@ -156,7 +157,7 @@ public class ExpressionManipulators {
             if (variables.containsKey(node.getName())) {
                 node = simplifyHelper(variables, variables.get(node.getName()));
             }
-        } else if (node.isOperation()) {
+        } else if (!node.isNumber()) {
             IList<AstNode> children = node.getChildren();
             AstNode leftNode = children.get(0);
             AstNode rightNode = children.get(1);
@@ -167,10 +168,10 @@ public class ExpressionManipulators {
                 children.set(1, simplifyHelper(variables, rightNode));
             }
             if (leftNode.isVariable() && variables.containsKey(leftNode.getName())) {
-                // return new subtree with mapped leftNode value, and rightNode
+                children.set(0, simplifyHelper(variables, variables.get(leftNode.getName())));
             } 
             if (rightNode.isVariable() && variables.containsKey(rightNode.getName())) {
-                // same as above but reversed
+                children.set(1, simplifyHelper(variables, variables.get(rightNode.getName())));
             }
             if (leftNode.isNumber() && rightNode.isNumber()) {
                 return new AstNode(toDoubleHelper(variables, node));
