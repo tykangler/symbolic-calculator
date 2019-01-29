@@ -167,10 +167,10 @@ public class ExpressionManipulators {
                 children.set(1, simplifyHelper(variables, rightNode));
             }
             if (leftNode.isVariable() && variables.containsKey(leftNode.getName())) {
-                // return new subtree with 
+                // return new subtree with mapped leftNode value, and rightNode
             } 
             if (rightNode.isVariable() && variables.containsKey(rightNode.getName())) {
-                
+                // same as above but reversed
             }
             if (leftNode.isNumber() && rightNode.isNumber()) {
                 return new AstNode(toDoubleHelper(variables, node));
