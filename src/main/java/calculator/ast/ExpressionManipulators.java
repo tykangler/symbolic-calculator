@@ -70,27 +70,16 @@ public class ExpressionManipulators {
     }
 
     private static double toDoubleHelper(IDictionary<String, AstNode> variables, AstNode node) {
-        // There are three types of nodes, so we have three cases.
         if (node.isNumber()) {
             return node.getNumericValue();
         } else if (node.isVariable()) {
-            //if (variables.containsKey(node.getName())) { // if the variable is already defined / being redefined
-                //AstNode key = variables.get(node.getName());
             if (!variables.containsKey(node.getName())) {
                 throw new EvaluationError("Variable is undefined.");
             }
             return toDoubleHelper(variables, variables.get(node.getName()));
-            //} else { // if the variable is not yet defined
-            //   variables.put(node.getName(), new AstNode(node.getName());
-
-            //}
         } else {
-            // You may assume the expression node has the correct number of children.
-            // If you wish to make your code more robust, you can also use the provided
-            // "assertNodeMatches" method to verify the input is valid.
             String name = node.getName();
             IList<AstNode> children = node.getChildren();
-            // assertNodeMatches(node, name, 1);
             if (name.equals("+")) {
                 return toDoubleHelper(variables, children.get(0))
                         + toDoubleHelper(variables, children.get(1));
@@ -159,20 +148,26 @@ public class ExpressionManipulators {
     private static AstNode simplifyHelper(IDictionary<String, AstNode> variables, AstNode node) {
         if (node.isVariable()) {
             if (variables.containsKey(node.getName())) {
-                node = new AstNode(toDoubleHelper(variables, variables.get(node.getName())));
+                node = variables.get(node.getName());
             }
-        } else if (!node.isNumber()) {
+        } 
+        if (node.isOperation()) {
             IList<AstNode> children = node.getChildren();
             AstNode leftNode = children.get(0);
-            AstNode rightNode = children.get(1);
-            if (leftNode.isOperation() || leftNode.isVariable()) {
-                children.set(0, simplifyHelper(variables, leftNode));
+            if (leftNode.isOperation()) {
+                node = simplifyHelper(variables, leftNode);
             }
-            if (rightNode.isOperation() || rightNode.isVariable()) {
-                children.set(1, simplifyHelper(variables, rightNode));
-            }
-            if (leftNode.isNumber() && rightNode.isNumber()) {
-                return new AstNode(toDoubleHelper(variables, node));
+            if (children.size() > 1) {
+                AstNode rightNode = children.get(1);
+                if (rightNode.isOperation()) {
+                    node = simplifyHelper(variables, rightNode);
+                }
+                if (leftNode.isNumber() && rightNode.isNumber()) {
+                    if (node.getName().equals("+") || node.getName().equals("-") || 
+                    node.getName().equals("*")) {
+                        node = new AstNode(toDoubleHelper(variables, node));
+                    }
+                }
             }
         }
         return node;
