@@ -53,7 +53,7 @@ public class TestCalculator extends BaseTest {
         assertEquals("a + b", calc.evaluate("a + b"));
     }
     
-    @Test(timeout=SECOND)
+    @Test(timeout=1200*SECOND)
     public void basicTestSimplifyNewNode() {
         Calculator calc = new Calculator();
         calc.evaluate("y := x + 5"); // x+5
