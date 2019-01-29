@@ -71,18 +71,20 @@ public class ExpressionManipulators {
     }
 
     private static double toDoubleHelper(IDictionary<String, AstNode> variables, AstNode node) {
-        // There are three types of nodes, so we have three cases. 
+        // There are three types of nodes, so we have three cases.
         if (node.isNumber()) {
             return node.getNumericValue();
         } else if (node.isVariable()) {
-            if (variables.containsKey(node.getName())) { // if the variable is already defined / being redefined
+            //if (variables.containsKey(node.getName())) { // if the variable is already defined / being redefined
                 //AstNode key = variables.get(node.getName());
-                variables.put(node.getName(), new AstNode(node.getNumericValue()));
-                return variables.get(node.getName()).getNumericValue();
-            } else { // if the variable is not yet defined
-                variables.put(node.getName(), new AstNode(node.getName());
-
+            if (!variables.containsKey(node.getName())) {
+                throw new EvaluationError("Variable is undefined.");
             }
+            return toDoubleHelper(variables, variables.get(node.getName()));
+            //} else { // if the variable is not yet defined
+            //   variables.put(node.getName(), new AstNode(node.getName());
+
+            //}
         } else {
             // You may assume the expression node has the correct number of children.
             // If you wish to make your code more robust, you can also use the provided
@@ -109,10 +111,11 @@ public class ExpressionManipulators {
                 return -1 * toDoubleHelper(variables, children.get(0));
             } else if (name.equals("sin")) {
                 return Math.sin(toDoubleHelper(variables, children.get(0)));
-            } else { // cos
+            } else if (name.equals("cos")) {
                 return Math.cos(toDoubleHelper(variables, children.get(0)));
+            } else { // operation is undefined
+                throw new EvaluationError("Operation is undefined.");
             }
-
         }
     }
 
