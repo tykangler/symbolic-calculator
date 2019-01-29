@@ -76,11 +76,7 @@ public class ExpressionManipulators {
             if (!variables.containsKey(node.getName())) {
                 throw new EvaluationError("Variable is undefined.");
             }
-<<<<<<< HEAD
             return toDoubleHelper(variables, variables.get(node.getName()));
-=======
-            return variables.get(node.getName()).getNumericValue();
->>>>>>> 1aedf7d4a1ba1bd4f248bc94103c9af5ab9dff31
         } else {
             String name = node.getName();
             IList<AstNode> children = node.getChildren();
@@ -135,15 +131,6 @@ public class ExpressionManipulators {
      * "NUM - NUM", or "NUM * NUM", simplify them.
      */
     public static AstNode handleSimplify(Environment env, AstNode node) {
-        // Try writing this one on your own!
-        // Hint 1: Your code will likely be structured roughly similarly
-        //         to your "handleToDouble" method
-        // Hint 2: When you're implementing constant folding, you may want
-        //         to call your "handleToDouble" method in some way
-        // Hint 3: When implementing your private pair, think carefully about
-        //         when you should recurse. Do you recurse after simplifying
-        //         the current level? Or before?
-
         assertNodeMatches(node, "simplify", 1);
         AstNode expToConvert = node.getChildren().get(0);
         return simplifyHelper(env.getVariables(), expToConvert);
@@ -158,13 +145,13 @@ public class ExpressionManipulators {
         if (node.isOperation()) {
             IList<AstNode> children = node.getChildren();
             AstNode leftNode = children.get(0);
-            if (leftNode.isOperation()) {
-                node = simplifyHelper(variables, leftNode);
+            if (leftNode.isOperation() || leftNode.isVariable()) {
+                children.set(0, simplifyHelper(variables, leftNode));
             }
             if (children.size() > 1) {
                 AstNode rightNode = children.get(1);
-                if (rightNode.isOperation()) {
-                    node = simplifyHelper(variables, rightNode);
+                if (rightNode.isOperation() || rightNode.isVariable()) {
+                    children.set(1, simplifyHelper(variables, rightNode));
                 }
                 if (leftNode.isNumber() && rightNode.isNumber()) {
                     if (node.getName().equals("+") || node.getName().equals("-") || 
