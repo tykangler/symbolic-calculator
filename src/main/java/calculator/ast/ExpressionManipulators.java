@@ -75,12 +75,13 @@ public class ExpressionManipulators {
         if (node.isNumber()) {
             return node.getNumericValue();
         } else if (node.isVariable()) {
-            if (variables.containsKey(node.getName())) { // if the variable is already defined
-                AstNode key = variables.get(node.getName());
-                return key.getNumericValue();
-            } else { // if the variable is not yet defined
+            if (variables.containsKey(node.getName())) { // if the variable is already defined / being redefined
+                //AstNode key = variables.get(node.getName());
                 variables.put(node.getName(), new AstNode(node.getNumericValue()));
-                return 0.0; // ?
+                return variables.get(node.getName()).getNumericValue();
+            } else { // if the variable is not yet defined
+                variables.put(node.getName(), new AstNode(node.getName());
+
             }
         } else {
             // You may assume the expression node has the correct number of children.
