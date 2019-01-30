@@ -2,6 +2,7 @@ package calculator.ast;
 
 import calculator.interpreter.Environment;
 import calculator.errors.EvaluationError;
+import datastructures.concrete.DoubleLinkedList;
 import datastructures.interfaces.IDictionary;
 import datastructures.interfaces.IList;
 import misc.exceptions.NotYetImplementedException;
@@ -140,26 +141,30 @@ public class ExpressionManipulators {
         if (node.isVariable()) {
             if (variables.containsKey(node.getName())) {
                 node = variables.get(node.getName());
+                if (node.isOperation()) {
+                    AstNode expandedNode = new AstNode(node.getName(), new DoubleLinkedList<AstNode>());
+                    for (AstNode children : node.getChildren()) {
+                        expandedNode.getChildren().add(children);
+                    }
+                    node = expandedNode;
+                }
             }
         } 
         if (node.isOperation()) {
             IList<AstNode> children = node.getChildren();
             AstNode leftNode = children.get(0);
             if (leftNode.isOperation() || leftNode.isVariable()) {
-                leftNode = simplifyHelper(variables, leftNode);
+                children.set(0, simplifyHelper(variables, leftNode));
             }
             if (children.size() > 1) {
                 AstNode rightNode = children.get(1);
                 if (rightNode.isOperation() || rightNode.isVariable()) {
-                    rightNode = simplifyHelper(variables, rightNode);
+                    children.set(1, simplifyHelper(variables, rightNode));                   
                 }
                 if (leftNode.isNumber() && rightNode.isNumber()) {
                     if (node.getName().equals("+") || node.getName().equals("-") || 
                     node.getName().equals("*")) {
                         node = new AstNode(toDoubleHelper(variables, node));
-                    } else {
-                        children.set(0, leftNode);
-                        children.set(1, rightNode);
                     }
                 }
             }
