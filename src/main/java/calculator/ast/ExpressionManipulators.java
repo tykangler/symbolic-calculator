@@ -2,6 +2,7 @@ package calculator.ast;
 
 import calculator.interpreter.Environment;
 import calculator.errors.EvaluationError;
+import calculator.gui.ImageDrawer;
 import datastructures.concrete.DoubleLinkedList;
 import datastructures.interfaces.IDictionary;
 import datastructures.interfaces.IList;
@@ -210,9 +211,6 @@ public class ExpressionManipulators {
     public static AstNode plot(Environment env, AstNode node) {
         assertNodeMatches(node, "plot", 5);
 
-        // TODO: Your code here
-        throw new NotYetImplementedException();
-
         // Note: every single function we add MUST return an
         // AST node that your "simplify" function is capable of handling.
         // However, your "simplify" function doesn't really know what to do
@@ -222,6 +220,14 @@ public class ExpressionManipulators {
         //
         // When working on this method, you should uncomment the following line:
         //
-        // return new AstNode(1);
+        return new AstNode(1);
     }
+
+    private static void handlePlot(Environment env, 
+                                   AstNode expr, AstNode var, 
+                                   double min, double max, double step) {
+        
+
+    }
+
 }
