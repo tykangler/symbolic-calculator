@@ -8,7 +8,6 @@ import datastructures.interfaces.IDictionary;
 import datastructures.interfaces.IList;
 
 import java.lang.Math;
-import java.util.Iterator;
 
 /**
  * All of the public static methods in this class are given the exact same parameters for
@@ -211,18 +210,12 @@ public class ExpressionManipulators {
     public static AstNode plot(Environment env, AstNode node) {
         assertNodeMatches(node, "plot", 5);
         IList<AstNode> children = node.getChildren();
-        IList<AstNode> exprChildren = children.get(0).getChildren();
-        Iterator<AstNode> i = exprChildren.iterator();
 
         double varMin = children.get(2).getNumericValue();
         double varMax = children.get(3).getNumericValue();
         double step = children.get(4).getNumericValue();
 
-        while (i.hasNext()) {
-            if (!env.getVariables().containsKey(i.next().getName())) {
-                throw new EvaluationError("The expression contains an undefined variable.");
-            }
-        }
+        // Still need to take care of undefined variable error
         if (varMin > varMax) {
             throw new EvaluationError("varMin is greater than varMax. Please give values such that varMin < varMax");
         }
@@ -230,7 +223,7 @@ public class ExpressionManipulators {
             throw new EvaluationError("The 'var' variable is already defined");
         }
         if (step < 0) {
-            throw new EvaluationError("Please give a positive step value.");
+            throw new EvaluationError("Please give a positive, non-zero step value.");
         }
 
 
