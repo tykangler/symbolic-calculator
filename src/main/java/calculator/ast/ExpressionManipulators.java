@@ -157,6 +157,9 @@ public class ExpressionManipulators {
                     if (node.getName().equals("+") || node.getName().equals("-") ||
                     node.getName().equals("*")) {
                         node = new AstNode(toDoubleHelper(variables, node));
+                    } else {
+                        children.set(0, leftNode);
+                        children.set(1, rightNode);
                     }
                 }
             }

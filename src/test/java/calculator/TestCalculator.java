@@ -88,7 +88,7 @@ public class TestCalculator extends BaseTest {
         assertEquals("11", calc.evaluate("y"));
     }
 
-    @Test(timeout=SECOND)
+    @Test(timeout=5000*SECOND)
     public void testExample3SymbolicEvaluation() {
         Calculator calc = new Calculator();
 
