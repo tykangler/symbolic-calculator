@@ -5,9 +5,9 @@ import calculator.errors.EvaluationError;
 import datastructures.concrete.DoubleLinkedList;
 import datastructures.interfaces.IDictionary;
 import datastructures.interfaces.IList;
-import misc.exceptions.NotYetImplementedException;
 
 import java.lang.Math;
+import java.util.Iterator;
 
 /**
  * All of the public static methods in this class are given the exact same parameters for
@@ -209,9 +209,31 @@ public class ExpressionManipulators {
      */
     public static AstNode plot(Environment env, AstNode node) {
         assertNodeMatches(node, "plot", 5);
+        IList<AstNode> children = node.getChildren();
+        IList<AstNode> exprChildren = children.get(0).getChildren();
+        Iterator<AstNode> i = exprChildren.iterator();
 
-        // TODO: Your code here
-        throw new NotYetImplementedException();
+        double varMin = children.get(2).getNumericValue();
+        double varMax = children.get(3).getNumericValue();
+        double step = children.get(4).getNumericValue();
+
+        while (i.hasNext()) {
+            if (!env.getVariables().containsKey(i.next().getName())) {
+                throw new EvaluationError("The expression contains an undefined variable.");
+            }
+        }
+        if (varMin > varMax) {
+            throw new EvaluationError("varMin is greater than varMax. Please give values such that varMin < varMax");
+        }
+        if (env.getVariables().containsKey(children.get(1).getName())) {
+            throw new EvaluationError("The 'var' variable is already defined");
+        }
+        if (step < 0) {
+            throw new EvaluationError("Please give a positive step value.");
+        }
+
+
+        // env.getImageDrawer().drawScatterPlot();
 
         // Note: every single function we add MUST return an
         // AST node that your "simplify" function is capable of handling.
