@@ -162,7 +162,7 @@ public class ExpressionManipulators {
                     children.set(1, simplifyHelper(variables, rightNode));                   
                 }
                 if (leftNode.isNumber() && rightNode.isNumber()) {
-                    if (node.getName().equals("+") || node.getName().equals("-") || 
+                    if (node.getName().equals("+") || node.getName().equals("-") ||
                     node.getName().equals("*")) {
                         node = new AstNode(toDoubleHelper(variables, node));
                     }
