@@ -138,7 +138,7 @@ public class ExpressionManipulators {
             }
         } 
         if (node.isOperation()) {
-            node = simplifyOperation(variables, node);
+            node = simplifyExpr(variables, node);
         }
         return node;
     }
@@ -151,7 +151,7 @@ public class ExpressionManipulators {
         return expanded;
     }
 
-    private static AstNode simplifyOperation(IDictionary<String, AstNode> variables, AstNode node) {
+    private static AstNode simplifyExpr(IDictionary<String, AstNode> variables, AstNode node) {
         IList<AstNode> children = node.getChildren();
         AstNode leftNode = children.get(0);
         if (leftNode.isOperation() || leftNode.isVariable()) {
