@@ -57,14 +57,6 @@ public class ExpressionManipulators {
      * @throws EvaluationError  if any of the expressions uses an unknown operation.
      */
     public static AstNode handleToDouble(Environment env, AstNode node) {
-        // To help you get started, we've implemented this method for you.
-        // You should fill in the locations specified by "your code here"
-        // in the 'toDoubleHelper' method.
-        //
-        // If you're not sure why we have a public method calling a private
-        // recursive helper method, review your notes from CSE 143 (or the
-        // equivalent class you took) about the 'public-private pair' pattern.
-
         assertNodeMatches(node, "toDouble", 1);
         AstNode exprToConvert = node.getChildren().get(0);
         return new AstNode(toDoubleHelper(env.getVariables(), exprToConvert));
@@ -142,11 +134,11 @@ public class ExpressionManipulators {
             if (variables.containsKey(node.getName())) {
                 node = variables.get(node.getName());
                 if (node.isOperation()) {
-                    AstNode expandedNode = new AstNode(node.getName(), new DoubleLinkedList<AstNode>());
-                    for (AstNode children : node.getChildren()) {
-                        expandedNode.getChildren().add(children);
+                    AstNode temp = new AstNode(node.getName(), new DoubleLinkedList<AstNode>());
+                    for (AstNode child : node.getChildren()) {
+                        temp.getChildren().add(child);
                     }
-                    node = expandedNode;
+                    node = temp;
                 }
             }
         } 
@@ -215,16 +207,15 @@ public class ExpressionManipulators {
         double varMax = toDoubleHelper(env.getVariables(), children.get(3));
         double step = toDoubleHelper(env.getVariables(), children.get(4));
         if (varMin > varMax) {
-            throw new EvaluationError("varMin is greater than varMax. Please give values such that varMin < varMax");
+            throw new EvaluationError("varMin must be less than varMax");
         }
         if (env.getVariables().containsKey(var.getName())) {
-            throw new EvaluationError("The 'var' variable is already defined");
+            throw new EvaluationError("Given variable is already defined");
         }
         if (step < 0) {
             throw new EvaluationError("Please give a positive, non-zero step value.");
         }
         handlePlot(env, children.get(0), var, varMin, varMax, step);
-        env.getVariables().remove(var.getName());
         return new AstNode(1);
     }
 
@@ -240,7 +231,8 @@ public class ExpressionManipulators {
             yValues.add(toDoubleHelper(variables, expr));
             min += step;
         }
-        env.getImageDrawer().drawScatterPlot("", "", "", xValues, yValues);
+        env.getImageDrawer().drawScatterPlot("Plot", var.getName(), "output", xValues, yValues);
+        variables.remove(var.getName());
     }
 
 }
