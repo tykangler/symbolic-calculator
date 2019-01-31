@@ -210,42 +210,37 @@ public class ExpressionManipulators {
     public static AstNode plot(Environment env, AstNode node) {
         assertNodeMatches(node, "plot", 5);
         IList<AstNode> children = node.getChildren();
-
-        double varMin = children.get(2).getNumericValue();
-        double varMax = children.get(3).getNumericValue();
-        double step = children.get(4).getNumericValue();
-
-        // Still need to take care of undefined variable error
+        AstNode var = children.get(1);
+        double varMin = toDoubleHelper(env.getVariables(), children.get(2));
+        double varMax = toDoubleHelper(env.getVariables(), children.get(3));
+        double step = toDoubleHelper(env.getVariables(), children.get(4));
         if (varMin > varMax) {
             throw new EvaluationError("varMin is greater than varMax. Please give values such that varMin < varMax");
         }
-        if (env.getVariables().containsKey(children.get(1).getName())) {
+        if (env.getVariables().containsKey(var.getName())) {
             throw new EvaluationError("The 'var' variable is already defined");
         }
         if (step < 0) {
             throw new EvaluationError("Please give a positive, non-zero step value.");
         }
-
-
-        // env.getImageDrawer().drawScatterPlot();
-
-        // Note: every single function we add MUST return an
-        // AST node that your "simplify" function is capable of handling.
-        // However, your "simplify" function doesn't really know what to do
-        // with "plot" functions (and what is the "plot" function supposed to
-        // evaluate to anyways?) so we'll settle for just returning an
-        // arbitrary number.
-        //
-        // When working on this method, you should uncomment the following line:
-        //
+        handlePlot(env, children.get(0), var, varMin, varMax, step);
+        env.getVariables().remove(var.getName());
         return new AstNode(1);
     }
 
-    private static void handlePlot(Environment env, 
-                                   AstNode expr, AstNode var, 
+    private static void handlePlot(Environment env, AstNode expr, AstNode var, 
                                    double min, double max, double step) {
-        
-
+        IDictionary<String, AstNode> variables = env.getVariables();                               
+        IList<Double> xValues = new DoubleLinkedList<Double>();
+        IList<Double> yValues = new DoubleLinkedList<Double>();
+        int numValues = (int) ((max - min) / step) + 1;
+        for (int i = 0; i < numValues; i++) {
+            variables.put(var.getName(), new AstNode(min));
+            xValues.add(min);
+            yValues.add(toDoubleHelper(variables, expr));
+            min += step;
+        }
+        env.getImageDrawer().drawScatterPlot("", "", "", xValues, yValues);
     }
 
 }
