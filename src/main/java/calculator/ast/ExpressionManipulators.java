@@ -2,7 +2,6 @@ package calculator.ast;
 
 import calculator.interpreter.Environment;
 import calculator.errors.EvaluationError;
-import calculator.gui.ImageDrawer;
 import datastructures.concrete.DoubleLinkedList;
 import datastructures.interfaces.IDictionary;
 import datastructures.interfaces.IList;
@@ -134,30 +133,39 @@ public class ExpressionManipulators {
             if (variables.containsKey(node.getName())) {
                 node = variables.get(node.getName());
                 if (node.isOperation()) {
-                    AstNode temp = new AstNode(node.getName(), new DoubleLinkedList<AstNode>());
-                    for (AstNode child : node.getChildren()) {
-                        temp.getChildren().add(child);
-                    }
-                    node = temp;
+                    node = expandVariable(node);
                 }
             }
         } 
         if (node.isOperation()) {
-            IList<AstNode> children = node.getChildren();
-            AstNode leftNode = children.get(0);
-            if (leftNode.isOperation() || leftNode.isVariable()) {
-                children.set(0, simplifyHelper(variables, leftNode));
+            node = simplifyOperation(variables, node);
+        }
+        return node;
+    }
+
+    private static AstNode expandVariable(AstNode node) {
+        AstNode expanded = new AstNode(node.getName(), new DoubleLinkedList<AstNode>());
+        for (AstNode child : node.getChildren()) {
+            expanded.getChildren().add(child);
+        }
+        return expanded;
+    }
+
+    private static AstNode simplifyOperation(IDictionary<String, AstNode> variables, AstNode node) {
+        IList<AstNode> children = node.getChildren();
+        AstNode leftNode = children.get(0);
+        if (leftNode.isOperation() || leftNode.isVariable()) {
+            children.set(0, simplifyHelper(variables, leftNode));
+        }
+        if (children.size() > 1) {
+            AstNode rightNode = children.get(1);
+            if (rightNode.isOperation() || rightNode.isVariable()) {
+                children.set(1, simplifyHelper(variables, rightNode));                   
             }
-            if (children.size() > 1) {
-                AstNode rightNode = children.get(1);
-                if (rightNode.isOperation() || rightNode.isVariable()) {
-                    children.set(1, simplifyHelper(variables, rightNode));                   
-                }
-                if (leftNode.isNumber() && rightNode.isNumber()) {
-                    if (node.getName().equals("+") || node.getName().equals("-") ||
-                    node.getName().equals("*")) {
-                        node = new AstNode(toDoubleHelper(variables, node));
-                    }
+            if (leftNode.isNumber() && rightNode.isNumber()) {
+                if (node.getName().equals("+") || node.getName().equals("-") ||
+                node.getName().equals("*")) {
+                    node = new AstNode(toDoubleHelper(variables, node));
                 }
             }
         }
