@@ -20,7 +20,7 @@ public class Experiment3 {
         CsvWriter writer = new CsvWriter();
         writer.addColumn("InputIndices", indices);
         writer.addColumn("TestResults", testResults);
-        writer.writeToFile("experimentdata/experiment3.csv");
+        writer.writeToFile("C:/Users/Tyler/Programming/Java Programs/CSE 373/HW2/hw2-bobcat/experimentdata/experiment3.csv");
 
         System.out.println("All done!");
     }

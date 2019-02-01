@@ -1,3 +1,6 @@
+# Experiment files
+# /experimentdata/
+
 # Local gradle files
 gradle/
 gradlew
